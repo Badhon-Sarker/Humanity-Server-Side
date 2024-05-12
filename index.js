@@ -12,7 +12,7 @@ app.use(express.json())
 
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.VITE_USER}:${process.env.VITE_PASS}@cluster0.qx0skjo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -42,6 +42,13 @@ async function run() {
     app.get('/volunteers', async(req, res)=>{
         const cursor = volunteerCollection.find()
         const result = await cursor.toArray()
+        res.send(result)
+    })
+
+
+    app.get('/volunteer/:id', async(req, res)=>{
+        const id = new ObjectId(req.params.id)
+        const result = await volunteerCollection.findOne(id)       
         res.send(result)
     })
 
