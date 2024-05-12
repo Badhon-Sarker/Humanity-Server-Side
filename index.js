@@ -31,6 +31,7 @@ async function run() {
 
 
     const volunteerCollection = client.db("humanity").collection('volunteers')
+    const volunteerReqCollection = client.db("humanity").collection('request')
 
 
     app.post('/volunteers', async(req, res)=>{
@@ -45,12 +46,27 @@ async function run() {
         res.send(result)
     })
 
-
+    
     app.get('/volunteer/:id', async(req, res)=>{
         const id = new ObjectId(req.params.id)
         const result = await volunteerCollection.findOne(id)       
         res.send(result)
     })
+
+
+    app.get('/beVolunteer/:id', async(req, res)=>{
+        const id = new ObjectId(req.params.id)
+        const result = await volunteerCollection.findOne(id)       
+        res.send(result)
+    })
+
+
+    app.post('/beVolunteers', async(req, res)=>{
+        const data = req.body
+        const result = await volunteerReqCollection.insertOne(data)
+        res.send(result)
+    })
+    
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
