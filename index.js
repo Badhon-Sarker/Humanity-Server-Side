@@ -61,12 +61,30 @@ async function run() {
     })
 
 
+    app.get('/myPost/:email', async(req, res)=>{
+        const email = req.params.email
+        const query = { email }
+        const result = await volunteerCollection.find(query).toArray()
+        res.send(result)
+        
+    })
+
+
+    app.get('/myVolReq/:email', async(req, res)=>{
+        const email = req.params.email
+        const query = { email }
+        const result = await volunteerReqCollection.find(query).toArray()
+        res.send(result)
+        
+    })
+
+
     app.post('/beVolunteers', async(req, res)=>{
         const data = req.body
         const result = await volunteerReqCollection.insertOne(data)
         res.send(result)
     })
-    
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
