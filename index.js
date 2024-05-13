@@ -86,6 +86,32 @@ async function run() {
     })
 
 
+    app.put('/updatePost/:id', async(req, res)=>{
+
+        const query = {_id: new ObjectId(req.params.id)}
+
+        const data = {
+            $set: {
+               
+                thumbnail: req.body.thumbnail,
+                title: req.body.title,
+                description: req.body.description,
+                category: req.body.category,
+                location: req.body.location,
+                number: req.body.number,
+                date: req.body.date,
+                email: req.body.email,
+                name: req.body.name
+
+            },
+          };
+
+        const result = await volunteerCollection.updateOne(query, data);
+        
+        res.send(result)
+    })
+
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
