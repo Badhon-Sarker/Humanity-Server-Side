@@ -40,10 +40,22 @@ async function run() {
         res.send(result)
     })
 
-    app.get('/volunteers', async(req, res)=>{
 
+    app.get('/volunteers', async(req, res)=>{      
         const cursor = volunteerCollection.find().sort({date: 1})
         const result = await cursor.toArray()
+        res.send(result)
+    })
+
+    
+
+    app.get('/volunteersSearch', async(req, res)=>{
+        const search = req.query.search
+
+        let query = {
+            title: { $regex: search, $options: 'i'}
+        }
+        const result = await volunteerCollection.find(query).toArray()
         res.send(result)
     })
 
