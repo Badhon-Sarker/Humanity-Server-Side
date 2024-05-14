@@ -41,7 +41,8 @@ async function run() {
     })
 
     app.get('/volunteers', async(req, res)=>{
-        const cursor = volunteerCollection.find()
+
+        const cursor = volunteerCollection.find().sort({date: 1})
         const result = await cursor.toArray()
         res.send(result)
     })
