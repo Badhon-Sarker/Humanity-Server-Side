@@ -132,7 +132,7 @@ async function run() {
 
     app.get('/myVolReq/:email', async(req, res)=>{
         const email = req.params.email
-        const query = { email }
+        const query = { userEmail: email }
         const result = await volunteerReqCollection.find(query).toArray()
         res.send(result)
         
