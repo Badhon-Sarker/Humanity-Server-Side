@@ -1,18 +1,30 @@
 const express = require('express')
 const cors = require('cors')
+const jwt = require('jsonwebtoken')
+const cookieParser = require('cookie-parser')
 require('dotenv').config()
 const app = express()
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000
 
 
 // middleware
-app.use(cors())
+app.use(cors({
+    origin: [
+        'http://localhost:5173',
+        'http://localhost:5174',
+        
+      ],
+      credentials: true,
+      optionsSuccessStatus: 200
+}))
 app.use(express.json())
+app.use(cookieParser())
 
 
 
 
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+
 const uri = `mongodb+srv://${process.env.VITE_USER}:${process.env.VITE_PASS}@cluster0.qx0skjo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -32,6 +44,41 @@ async function run() {
 
     const volunteerCollection = client.db("humanity").collection('volunteers')
     const volunteerReqCollection = client.db("humanity").collection('request')
+
+
+
+    // jwt implementation
+
+    app.post('/jwt', async(req, res)=>{
+        const user = req.body
+        const token = jwt.sign(user, process.env.ACCESS_TOKEN,{
+            expiresIn: '365d',
+        })
+
+        res
+        .cookie('token', token, {
+            httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+        })
+        .send({success: true})
+    })
+
+
+    app.get('/logOut', (req, res) => {
+        res
+          .clearCookie('token', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+            maxAge: 0,
+          })
+          .send({ success: true })
+      })
+
+
+
+
 
 
     app.post('/volunteers', async(req, res)=>{
