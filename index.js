@@ -9,14 +9,16 @@ const port = process.env.PORT || 5000
 
 
 // middleware
+
+
 app.use(cors({
     origin: [
         'http://localhost:5173',
         'http://localhost:5174',
-        
+        'https://assignment-11-e078a.web.app',
       ],
       credentials: true,
-      optionsSuccessStatus: 200
+      optionSuccessStatus: 200,
 }))
 app.use(express.json())
 app.use(cookieParser())
@@ -39,7 +41,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+
 
 
     const volunteerCollection = client.db("humanity").collection('volunteers')
