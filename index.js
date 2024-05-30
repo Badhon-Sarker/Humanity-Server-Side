@@ -46,6 +46,7 @@ async function run() {
 
     const volunteerCollection = client.db("humanity").collection('volunteers')
     const volunteerReqCollection = client.db("humanity").collection('request')
+    const volunteerFeedbackCollection = client.db("humanity").collection('feedback')
 
 
 
@@ -189,6 +190,13 @@ async function run() {
 
     app.delete('/needVolDelete/:id', async(req, res)=>{
         const result = await volunteerCollection.deleteOne({_id: new ObjectId(req.params.id)})
+        res.send(result)
+    })
+
+
+     app.post('/feedback', async(req, res)=>{
+        const data = req.body
+        const result = await volunteerFeedbackCollection.insertOne(data)
         res.send(result)
     })
 
